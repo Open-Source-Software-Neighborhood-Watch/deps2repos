@@ -2,7 +2,13 @@
 
 import unittest
 
-from pypi import get_pypi_data_json, get_github_url_from_pypi_json
+from pypi import (
+    get_github_url_from_pypi_json,
+    get_pypi_data_json,
+    get_pypi_package_dependencies,
+)
+
+# pylint: disable="attribute-defined-outside-init"
 
 
 class TestPypiMethods(unittest.TestCase):
@@ -27,6 +33,12 @@ class TestPypiMethods(unittest.TestCase):
             get_github_url_from_pypi_json(self.requests_test_json),
             "https://github.com/IQTLabs/NetworkML",
         )
+
+    def test_get_pypi_package_dependencies(self):
+        """Check that pipgrip produces dependency list."""
+        self.requests_test_deps = get_pypi_package_dependencies("requests")
+        self.assertEqual(len(self.requests_test_deps), 5)
+        self.assertTrue(self.requests_test_deps["certifi"])
 
 
 if __name__ == "__main__":
