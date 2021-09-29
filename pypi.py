@@ -1,22 +1,41 @@
 """PyPI-related functionality"""
 
+import ast
+import subprocess
 import sys
 import urllib
 from urllib.parse import urlparse
 
+
 import requests
 
 
-def get_pypi_package_dependencies():
-    """TODO: use pipgrip --json requests"""
-    pass
+def get_pypi_package_dependencies(pkg):
+    """Determine dependencies for a PyPI package
+
+    Use module pipgrip to create a dictionary of dependencies
+    for a given Python package from PyPI.
+
+    Args:
+        pkg (str): the name of a python package found on PyPI
+
+    Returns:
+        dict_result: dict of package dependencies
+    """
+    command = f"pipgrip --json {pkg}"
+    result = subprocess.run(command.split(), stdout=subprocess.PIPE, check=True)
+
+    str_result = result.stdout.decode("UTF-8")
+    dict_result = ast.literal_eval(str_result)
+
+    return dict_result
 
 
 def get_pypi_data_json(pkg):
     """Return PyPI json associated with a python package.
 
     Args:
-        pkg: the name of a python package found on PyPI
+        pkg (str): the name of a python package found on PyPI
 
     Returns:
         dict: data related to a PyPI package
