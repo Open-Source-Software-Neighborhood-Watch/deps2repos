@@ -25,6 +25,7 @@ def get_pypi_package_dependencies(pkg):
     command = f"pipgrip --json {pkg}"
     result = subprocess.run(command.split(), stdout=subprocess.PIPE, check=True)
 
+    # convert ouput to string and then dict
     str_result = result.stdout.decode("UTF-8")
     dict_result = ast.literal_eval(str_result)
 
