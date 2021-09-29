@@ -8,6 +8,27 @@ from urllib.parse import urlparse
 
 
 import requests
+import requirements
+
+
+def parse_requirements_dot_text(filepath):
+    """Convert requirements.txt to list of package names
+
+    Args:
+        filepath (str): filepath to a requirements.txt file
+
+    Returns:
+        pkgs: list of packages
+    """
+
+    # pylint: disable="no-member"
+
+    pkgs = []
+    with open(filepath, "r") as file:
+        for req in requirements.parse(file):
+            pkgs.append(req.name)
+
+    return pkgs
 
 
 def get_pypi_package_dependencies(pkg):
