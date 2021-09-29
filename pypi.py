@@ -2,13 +2,71 @@
 
 import ast
 import subprocess
-import sys
 import urllib
 from urllib.parse import urlparse
 
 
 import requests
 import requirements
+
+
+def python_requirements_dot_text_analysis(filepath):
+    """Execute overall analysis of Python's requirements.txt
+
+    Combines python-related functionality to perform end-to-end
+    analysis of requirements.txt. Prints output to terminal.
+
+    Args:
+        filepath (str): filepath to a requirements.txt file
+
+    Returns:
+        None
+    """
+    top_level_pkgs = parse_requirements_dot_text(filepath)
+
+    # Retrieve all dependencies, both top-level and transitive, and keep a
+    # unique list
+    all_pkgs = []
+    for pkg in top_level_pkgs:
+        all_deps = get_pypi_package_dependencies(pkg)
+        for dep in all_deps:
+            if dep not in all_pkgs:
+                all_pkgs.append(dep)
+
+    # retrieve github urls for unique pypi packages and store date
+    # on any packages without a PyPI entry or a gitHub
+    github_urls = []
+    pkgs_without_pypi_data = []
+    pkgs_without_githubs = []
+    for pkg in all_pkgs:
+
+        pypi_json = get_pypi_data_json(pkg)
+        if not pypi_json:
+            pkgs_without_pypi_data.append(pkg)
+
+        github_url = get_github_url_from_pypi_json(pypi_json)
+        if pypi_json and not github_url:
+            pkgs_without_githubs.append(pkg)
+
+        if github_url:
+            github_urls.append(github_url)
+
+    # print all results, making sure to print any packages without
+    # a PyPI entry or GitHub first to ensure an informed user
+    if pkgs_without_pypi_data:
+        print("\nWARNING: Some of these packages are not on PyPI:")
+        for pkg in pkgs_without_pypi_data:
+            print(pkg)
+        print("")
+
+    if pkgs_without_githubs:
+        print("\nWARNING: Some of the packages found on PyPI do not have GitHubs:")
+        for pkg in pkgs_without_githubs:
+            print(pkg)
+        print("")
+
+    for url in github_urls:
+        print(url)
 
 
 def parse_requirements_dot_text(filepath):
@@ -43,12 +101,16 @@ def get_pypi_package_dependencies(pkg):
     Returns:
         dict_result: dict of package dependencies
     """
-    command = f"pipgrip --json {pkg}"
-    result = subprocess.run(command.split(), stdout=subprocess.PIPE, check=True)
+    try:
+        command = f"pipgrip --json {pkg}"
+        result = subprocess.run(command.split(), capture_output=True, check=True)
 
-    # convert ouput to string and then dict
-    str_result = result.stdout.decode("UTF-8")
-    dict_result = ast.literal_eval(str_result)
+        # convert ouput to string and then dict
+        str_result = result.stdout.decode("UTF-8")
+        dict_result = ast.literal_eval(str_result)
+    # if pkg doesn't exist, return empty dict
+    except subprocess.CalledProcessError:
+        dict_result = {}
 
     return dict_result
 
@@ -66,9 +128,9 @@ def get_pypi_data_json(pkg):
         pkg_url = "https://pypi.org/pypi/" + pkg + "/json"
         response = requests.get(pkg_url)
         pypi_pkg_json = response.json()
+    # if no package found, return empty json
     except urllib.error.HTTPError:
-        print("ERROR: No such package on PyPI")
-        sys.exit(1)  # 1 indicates error
+        pypi_pkg_json = {}
 
     return pypi_pkg_json
 
