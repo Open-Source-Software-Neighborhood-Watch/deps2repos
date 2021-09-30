@@ -3,6 +3,18 @@ Convert dependency file into list of Git repositories
 
 
 
+## Installation
+
+To download:
+```
+git clone https://github.com/IQTLabs/deps2repos
+```
+
+To download dependencies:
+```
+pip install -r requirements.txt
+```
+
 ## Usage
 
 For help:
