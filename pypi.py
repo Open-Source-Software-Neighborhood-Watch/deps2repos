@@ -72,6 +72,10 @@ def python_requirements_dot_text_analysis(filepath):
 def parse_requirements_dot_text(filepath):
     """Convert requirements.txt to list of package names
 
+    TODO: considering making this parsing more general such that
+    pipfiles can be parsed too. See this library for one
+    potential solution: https://github.com/sarugaku/requirementslib
+
     Args:
         filepath (str): filepath to a requirements.txt file
 
