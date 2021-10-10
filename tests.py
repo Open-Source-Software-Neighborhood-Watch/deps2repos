@@ -8,6 +8,7 @@ from pypi import (
     get_pypi_package_dependencies,
     parse_requirements_dot_text,
 )
+from npm import parse_package_dot_json
 
 # pylint: disable="attribute-defined-outside-init"
 
@@ -49,6 +50,25 @@ class TestPypiMethods(unittest.TestCase):
         self.assertEqual(len(self.test_requirements), 3)
         self.assertEqual(
             self.test_requirements, ["package_a", "package_b", "package_c"]
+        )
+
+
+class TestNpmMethods(unittest.TestCase):
+    """Test npm-related methods."""
+
+    def test_parse_package_dot_json(self):
+        """Check parsing package.json files"""
+        self.test_package_json = parse_package_dot_json("test/test_package.json")
+        self.assertEqual(len(self.test_package_json), 5)
+        self.assertEqual(
+            self.test_package_json,
+            [
+                "@fortawesome/fontawesome",
+                "@fortawesome/fontawesome-svg-core",
+                "@fortawesome/free-solid-svg-icons",
+                "@fortawesome/react-fontawesome",
+                "d3"
+            ],
         )
 
 
