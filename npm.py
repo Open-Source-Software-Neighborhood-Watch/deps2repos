@@ -9,9 +9,9 @@ def parse_package_dot_json(filepath):
         filepath (str): filepath to a package.json file
 
     Returns:
-        pkgs: list of packages
+        dep_list -  list of packages
     """
-    with open('test/test_package.json') as json_file:
+    with open(filepath) as json_file:
         data = json.load(json_file)
 
     deps = data["dependencies"]
