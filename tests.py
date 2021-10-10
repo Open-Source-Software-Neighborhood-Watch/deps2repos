@@ -8,7 +8,7 @@ from pypi import (
     get_pypi_package_dependencies,
     parse_requirements_dot_text,
 )
-from npm import parse_package_dot_json
+from npm import get_github_link_from_npm_api, parse_package_dot_json
 
 # pylint: disable="attribute-defined-outside-init"
 
@@ -67,8 +67,16 @@ class TestNpmMethods(unittest.TestCase):
                 "@fortawesome/fontawesome-svg-core",
                 "@fortawesome/free-solid-svg-icons",
                 "@fortawesome/react-fontawesome",
-                "d3"
+                "d3",
             ],
+        )
+
+    def test_get_github_url_from_npm_api(self):
+        """Check that GitHub link is returned from npm API json."""
+        self.d3_github_link_test = get_github_link_from_npm_api("d3")
+        self.assertEqual(
+            self.d3_github_link_test,
+            "git+https://github.com/d3/d3.git",
         )
 
 
