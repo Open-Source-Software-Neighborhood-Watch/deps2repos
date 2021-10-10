@@ -6,6 +6,33 @@ import urllib
 import requests
 
 
+def js_package_dot_json_analysis(filepath):
+    """Execute overall analysis of javascript's package.json
+
+    Combines JavaScript-related functionality to perform end-to-end
+    analysis of package.json. Prints output to terminal.
+
+    # TODO: Keep track of packages that are either not on
+    # npm or do not have a GitHub. Report to user.
+
+    Args:
+        filepath (str): filepath to a package.json file
+
+    Returns:
+        None
+    """
+
+    dep_list = parse_package_dot_json(filepath)
+
+    github_urls = []
+    for dep in dep_list:
+        github_url = get_github_link_from_npm_api(dep)
+        github_urls.append(github_url)
+
+    for url in github_urls:
+        print(url)
+
+
 def parse_package_dot_json(filepath):
     """Convert package.json to list of package names
 
@@ -29,6 +56,9 @@ def parse_package_dot_json(filepath):
 
 def get_github_link_from_npm_api(pkg):
     """Retrieve github link for package from npm API
+
+    TODO: Keep only organization and package name from
+    GitHub URL.
 
     TODO: Consider trimming off "git+" from beginning
     of URLs.
