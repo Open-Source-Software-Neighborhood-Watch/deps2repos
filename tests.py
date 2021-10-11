@@ -11,7 +11,7 @@ from pypi import (
 from npm import (
     get_github_link_from_npm_api,
     parse_package_dot_json,
-    retrieve_npm_package_dependencies,
+    get_npm_package_dependencies,
 )
 
 # pylint: disable="attribute-defined-outside-init"
@@ -83,9 +83,9 @@ class TestNpmMethods(unittest.TestCase):
             "git+https://github.com/d3/d3.git",
         )
 
-    def test_retrieve_npm_package_dependencies(self):
+    def test_get_npm_package_dependencies(self):
         """Test retrieve_npm_package_dependencies function."""
-        self.d3_dep_list_test = retrieve_npm_package_dependencies("d3-zoom")
+        self.d3_dep_list_test = get_npm_package_dependencies("d3-zoom")
         self.assertEqual(
             self.d3_dep_list_test,
             [

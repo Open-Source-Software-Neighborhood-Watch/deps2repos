@@ -33,7 +33,7 @@ def js_package_dot_json_analysis(filepath):
         print(url)
 
 
-def retrieve_npm_package_dependencies(pkg):
+def get_npm_package_dependencies(pkg):
     """Retrieve a list of package dependencies.
 
     Args:
