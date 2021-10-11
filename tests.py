@@ -102,6 +102,11 @@ class TestNpmMethods(unittest.TestCase):
                 "d3-transition",
             ],
         )
+        self.doesnt_exist_dep_list_test = get_npm_package_dependencies("d3-zoom-xxxxx")
+        self.assertEqual(
+            self.doesnt_exist_dep_list_test,
+            [],
+        )
 
     def test_clean_github_link(self):
         """Test clean_github_link function."""
