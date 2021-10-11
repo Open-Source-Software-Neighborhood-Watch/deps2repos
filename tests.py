@@ -82,6 +82,11 @@ class TestNpmMethods(unittest.TestCase):
             self.d3_github_link_test,
             "git+https://github.com/d3/d3.git",
         )
+        self.doesnt_exist_github_link_test = get_github_link_from_npm_api("d3xjhdfh")
+        self.assertEqual(
+            self.doesnt_exist_github_link_test,
+            [],
+        )
 
     def test_get_npm_package_dependencies(self):
         """Test retrieve_npm_package_dependencies function."""
