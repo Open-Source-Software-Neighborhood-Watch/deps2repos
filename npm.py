@@ -102,19 +102,17 @@ def get_github_link_from_npm_api(pkg):
         pkg (str) - package name
 
     Returns:
-        github_link - URL to github
+        github_link - URL to github, empty if package not found
     """
-    # TODO: Keep only organization and package name from
-    # GitHub URL.
-    # TODO: Consider trimming off "git+" from beginning
-    # of URLs.
-    try:
-        pkg_url = "https://registry.npmjs.org/" + pkg
-        response = requests.get(pkg_url)
-        npm_pkg_json = response.json()
+    npm_pkg_json = requests.get("https://registry.npmjs.org/" + pkg).json()
+
+    # check if npm contains package
+    if npm_pkg_json == {"error": "Not found"}:
+        github_url = []
+    else:
         github_url = npm_pkg_json["repository"]["url"]
-    # if no package found, return empty json
-    except urllib.error.HTTPError as error:
-        github_url = f"No GitHub found. Error: {error}"
+
+    # TODO: Keep only organization and package name from GitHub URL.
+    # TODO: Consider trimming off "git+" from beginning of URLs.
 
     return github_url
