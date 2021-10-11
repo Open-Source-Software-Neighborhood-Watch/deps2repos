@@ -9,6 +9,7 @@ from pypi import (
     parse_requirements_dot_text,
 )
 from npm import (
+    clean_github_link,
     get_github_link_from_npm_api,
     parse_package_dot_json,
     get_npm_package_dependencies,
@@ -80,7 +81,7 @@ class TestNpmMethods(unittest.TestCase):
         self.d3_github_link_test = get_github_link_from_npm_api("d3")
         self.assertEqual(
             self.d3_github_link_test,
-            "git+https://github.com/d3/d3.git",
+            "https://github.com/d3/d3.git",
         )
         self.doesnt_exist_github_link_test = get_github_link_from_npm_api("d3xjhdfh")
         self.assertEqual(
@@ -89,7 +90,7 @@ class TestNpmMethods(unittest.TestCase):
         )
 
     def test_get_npm_package_dependencies(self):
-        """Test retrieve_npm_package_dependencies function."""
+        """Test get_npm_package_dependencies function."""
         self.d3_dep_list_test = get_npm_package_dependencies("d3-zoom")
         self.assertEqual(
             self.d3_dep_list_test,
@@ -100,6 +101,19 @@ class TestNpmMethods(unittest.TestCase):
                 "d3-selection",
                 "d3-transition",
             ],
+        )
+
+    def test_clean_github_link(self):
+        """Test clean_github_link function."""
+        self.assertEqual(
+            clean_github_link(
+                "git+https://www.github.com/psf/requests/tree/main/requests"
+            ),
+            "https://www.github.com/psf/requests",
+        )
+        self.assertEqual(
+            clean_github_link("https://github.com/psf/requests/tree/main/requests"),
+            "https://github.com/psf/requests",
         )
 
 
