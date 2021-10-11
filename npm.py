@@ -21,12 +21,20 @@ def js_package_dot_json_analysis(filepath):
     Returns:
         None
     """
+    # retrieve only top-level packages
+    top_level_pkgs = parse_package_dot_json(filepath)
 
-    dep_list = parse_package_dot_json(filepath)
+    # create list of ALL dependencies, both top-level and transitive
+    all_pkgs = []
+    for pkg in top_level_pkgs:
+        all_deps = get_npm_package_dependencies(pkg)
+        for dep in all_deps:
+            if dep not in all_pkgs:
+                all_pkgs.append(dep)
 
     github_urls = []
-    for dep in dep_list:
-        github_url = get_github_link_from_npm_api(dep)
+    for pkg in all_pkgs:
+        github_url = get_github_link_from_npm_api(pkg)
         github_urls.append(github_url)
 
     for url in github_urls:
