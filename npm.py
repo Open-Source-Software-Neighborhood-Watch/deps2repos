@@ -12,15 +12,15 @@ def js_package_dot_json_analysis(filepath):
     Combines JavaScript-related functionality to perform end-to-end
     analysis of package.json. Prints output to terminal.
 
-    # TODO: Keep track of packages that are either not on
-    # npm or do not have a GitHub. Report to user.
-
     Args:
         filepath (str): filepath to a package.json file
 
     Returns:
         None
     """
+    # TODO: Keep track of packages that are either not on
+    # npm or do not have a GitHub. Report to user.
+
     # retrieve only top-level packages
     top_level_pkgs = parse_package_dot_json(filepath)
 
@@ -98,18 +98,16 @@ def parse_package_dot_json(filepath):
 def get_github_link_from_npm_api(pkg):
     """Retrieve github link for package from npm API
 
-    TODO: Keep only organization and package name from
-    GitHub URL.
-
-    TODO: Consider trimming off "git+" from beginning
-    of URLs.
-
     Args:
         pkg (str) - package name
 
     Returns:
         github_link - URL to github
     """
+    # TODO: Keep only organization and package name from
+    # GitHub URL.
+    # TODO: Consider trimming off "git+" from beginning
+    # of URLs.
     try:
         pkg_url = "https://registry.npmjs.org/" + pkg
         response = requests.get(pkg_url)
