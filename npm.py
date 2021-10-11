@@ -33,6 +33,39 @@ def js_package_dot_json_analysis(filepath):
         print(url)
 
 
+def retrieve_npm_package_dependencies(pkg):
+    """Retrieve a list of package dependencies.
+
+    Args:
+        pkg (str) - package name
+
+    Returns:
+        dep_list - list of dependencies
+    """
+    # retrieve all package versions first
+    try:
+        pkg_url = "https://registry.npmjs.org/" + pkg
+        response = requests.get(pkg_url)
+        npm_pkg_json = response.json()
+        pkg_versions = npm_pkg_json["versions"]
+        # because python dicts are ordered as of 3.7, the last
+        # item SHOULD be the most recent version. If this assumption
+        # is wrong, this code is wrong
+        last_version = list(pkg_versions)[-1]
+    # TODO: handle error correctly and more gracefully
+    except urllib.error.HTTPError as error:
+        raise f"npm API error. Error: {error}"
+
+    # find dependencies for most recent version
+    dep_array = pkg_versions[last_version]["dependencies"]
+
+    dep_list = []
+    for dep in dep_array:
+        dep_list.append(dep)
+
+    return dep_list
+
+
 def parse_package_dot_json(filepath):
     """Convert package.json to list of package names
 
