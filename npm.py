@@ -2,7 +2,6 @@
 
 import json
 import re
-import urllib
 
 import requests
 
@@ -51,26 +50,25 @@ def get_npm_package_dependencies(pkg):
     Returns:
         dep_list - list of dependencies
     """
-    # retrieve all package versions first
-    try:
-        pkg_url = "https://registry.npmjs.org/" + pkg
-        response = requests.get(pkg_url)
-        npm_pkg_json = response.json()
+    npm_pkg_json = requests.get("https://registry.npmjs.org/" + pkg).json()
+
+    # check if npm contains package
+    if npm_pkg_json == {"error": "Not found"}:
+        dep_list = []
+    else:
+        # retrieve all package versions
         pkg_versions = npm_pkg_json["versions"]
         # because python dicts are ordered as of 3.7, the last
         # item SHOULD be the most recent version. If this assumption
         # is wrong, this code is wrong
         last_version = list(pkg_versions)[-1]
-    # TODO: handle error correctly and more gracefully
-    except urllib.error.HTTPError as error:
-        raise f"npm API error. Error: {error}"
 
-    # find dependencies for most recent version
-    dep_array = pkg_versions[last_version]["dependencies"]
+        # find dependencies for most recent version
+        dep_array = pkg_versions[last_version]["dependencies"]
 
-    dep_list = []
-    for dep in dep_array:
-        dep_list.append(dep)
+        dep_list = []
+        for dep in dep_array:
+            dep_list.append(dep)
 
     return dep_list
 
