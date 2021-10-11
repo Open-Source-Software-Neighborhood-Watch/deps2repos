@@ -1,6 +1,7 @@
 """npm-related functionality."""
 
 import json
+import re
 import urllib
 
 import requests
@@ -95,6 +96,25 @@ def parse_package_dot_json(filepath):
     return dep_list
 
 
+def clean_github_link(raw_url):
+    """Convert raw URL into GitHub link with org and repo.
+
+    Convert a raw URL into cleaned URL, where a cleaned url
+    has https://www.github.com/{org}/{package}
+
+    Args:
+        raw_url (str) - raw URL from npm
+
+    Returns
+        cleaned_url: string
+    """
+    # make www. optional
+    # check for a organization name after github.com and a package name
+    pattern = re.compile("https://(www.)?github.com/[^/]*/[^/]*")
+    cleaned_url = pattern.search(raw_url).group(0)
+    return cleaned_url
+
+
 def get_github_link_from_npm_api(pkg):
     """Retrieve github link for package from npm API
 
@@ -102,17 +122,15 @@ def get_github_link_from_npm_api(pkg):
         pkg (str) - package name
 
     Returns:
-        github_link - URL to github, empty if package not found
+        clean_github_url - URL to github, empty if package not found
     """
     npm_pkg_json = requests.get("https://registry.npmjs.org/" + pkg).json()
 
     # check if npm contains package
     if npm_pkg_json == {"error": "Not found"}:
-        github_url = []
+        clean_github_url = []
     else:
         github_url = npm_pkg_json["repository"]["url"]
+        clean_github_url = clean_github_link(github_url)
 
-    # TODO: Keep only organization and package name from GitHub URL.
-    # TODO: Consider trimming off "git+" from beginning of URLs.
-
-    return github_url
+    return clean_github_url
