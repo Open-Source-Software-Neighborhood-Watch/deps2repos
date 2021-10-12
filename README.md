@@ -13,7 +13,9 @@ dependencies.
 
 The JavaScript/npm functionlity is in less-than-beta-stage. When a user
 selects Javascript, this program currently only returns the GitHub links
-of the top-level dependencies.
+of the top-level dependencies and the dependencies of those top-level dependencies.
+In other words, this tool does not **yet** traverse the entire npm dependency
+list.
 
 
 ## Installation
