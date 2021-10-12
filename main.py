@@ -2,6 +2,7 @@
 
 import argparse
 
+from npm import js_package_dot_json_analysis
 from pypi import python_requirements_dot_text_analysis
 
 
@@ -16,6 +17,11 @@ def parse_command_line_arguments():
         default=False,  # default value is False
         help="Convert requirements.txt file into GitHub links.",
     )
+    parser.add_argument(
+        "--javascript",
+        default=False,  # default value is False
+        help="Convert package.json file into GitHub links.",
+    )
     return parser.parse_args()
 
 
@@ -26,3 +32,9 @@ if __name__ == "__main__":
     # for all top-level AND transitive dependencies.
     if args.python:
         python_requirements_dot_text_analysis(args.python)
+
+    # parse specified Python requirements.txt file and generate GitHub links
+    # for all top-level dependencies
+    # TODO: Analyze transitive dependencies too.
+    if args.javascript:
+        js_package_dot_json_analysis(args.javascript)

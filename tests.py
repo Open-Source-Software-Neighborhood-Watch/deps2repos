@@ -8,6 +8,12 @@ from pypi import (
     get_pypi_package_dependencies,
     parse_requirements_dot_text,
 )
+from npm import (
+    clean_github_link,
+    get_github_link_from_npm_api,
+    parse_package_dot_json,
+    get_npm_package_dependencies,
+)
 
 # pylint: disable="attribute-defined-outside-init"
 
@@ -49,6 +55,70 @@ class TestPypiMethods(unittest.TestCase):
         self.assertEqual(len(self.test_requirements), 3)
         self.assertEqual(
             self.test_requirements, ["package_a", "package_b", "package_c"]
+        )
+
+
+class TestNpmMethods(unittest.TestCase):
+    """Test npm-related methods."""
+
+    def test_parse_package_dot_json(self):
+        """Check parsing package.json files"""
+        self.test_package_json = parse_package_dot_json("test/test_package.json")
+        self.assertEqual(len(self.test_package_json), 5)
+        self.assertEqual(
+            self.test_package_json,
+            [
+                "@fortawesome/fontawesome",
+                "@fortawesome/fontawesome-svg-core",
+                "@fortawesome/free-solid-svg-icons",
+                "@fortawesome/react-fontawesome",
+                "d3",
+            ],
+        )
+
+    def test_get_github_url_from_npm_api(self):
+        """Check that GitHub link is returned from npm API json."""
+        self.d3_github_link_test = get_github_link_from_npm_api("d3")
+        self.assertEqual(
+            self.d3_github_link_test,
+            "https://github.com/d3/d3.git",
+        )
+        self.doesnt_exist_github_link_test = get_github_link_from_npm_api("d3xjhdfh")
+        self.assertEqual(
+            self.doesnt_exist_github_link_test,
+            [],
+        )
+
+    def test_get_npm_package_dependencies(self):
+        """Test get_npm_package_dependencies function."""
+        self.d3_dep_list_test = get_npm_package_dependencies("d3-zoom")
+        self.assertEqual(
+            self.d3_dep_list_test,
+            [
+                "d3-dispatch",
+                "d3-drag",
+                "d3-interpolate",
+                "d3-selection",
+                "d3-transition",
+            ],
+        )
+        self.doesnt_exist_dep_list_test = get_npm_package_dependencies("d3-zoom-xxxxx")
+        self.assertEqual(
+            self.doesnt_exist_dep_list_test,
+            [],
+        )
+
+    def test_clean_github_link(self):
+        """Test clean_github_link function."""
+        self.assertEqual(
+            clean_github_link(
+                "git+https://www.github.com/psf/requests/tree/main/requests"
+            ),
+            "https://www.github.com/psf/requests",
+        )
+        self.assertEqual(
+            clean_github_link("https://github.com/psf/requests/tree/main/requests"),
+            "https://github.com/psf/requests",
         )
 
 

@@ -2,6 +2,19 @@
 Convert dependency file into list of Git repositories
 
 
+## Explanation
+Have you ever wanted a list of all the GitHub links to the dependencies
+of a Python (PyPI) or JavaScript (npm) package? Then this is the repo
+for you!
+
+The Python/PyPI functionality is in beta stage. When a user selects Python,
+this program returns the GitHub links for all top-level and transitive
+dependencies.
+
+The JavaScript/npm functionlity is in less-than-beta-stage. When a user
+selects Javascript, this program currently only returns the GitHub links
+of the top-level dependencies.
+
 
 ## Installation
 
@@ -27,6 +40,12 @@ For a Python requirements.txt file:
 
 ```
 python main.py --python [filename]
+```
+
+For a Javascript package.json file:
+
+```
+python main.py --javascript [filename]
 ```
 
 Example command using deps2repos's own requirements.txt as input.
