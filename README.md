@@ -82,6 +82,14 @@ https://github.com/urllib3/urllib3
 https://github.com/davidfischer/requirements-parser
 ```
 
+To analyze only the dependencies explicitly stated in the requirements.txt file, use the
+`no-deps` flag (only works for PyPI currently):
+
+```
+python main.py --no_deps --python [filename]
+```
+
+
 ## Run Tests
 
 ```
