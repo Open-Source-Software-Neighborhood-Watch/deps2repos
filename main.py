@@ -22,6 +22,12 @@ def parse_command_line_arguments():
         default=False,  # default value is False
         help="Convert package.json file into GitHub links.",
     )
+    parser.add_argument(
+        "--no_deps",
+        dest="no_deps",
+        action="store_true",
+        help="Whether to also analyze transitive dependencies.",
+    )
     return parser.parse_args()
 
 
@@ -29,12 +35,10 @@ if __name__ == "__main__":
     args = parse_command_line_arguments()
 
     # parse specified Python requirements.txt file and generate GitHub links
-    # for all top-level AND transitive dependencies.
     if args.python:
-        python_requirements_dot_text_analysis(args.python)
+        python_requirements_dot_text_analysis(args.python, args.no_deps)
 
-    # parse specified Python requirements.txt file and generate GitHub links
-    # for all top-level dependencies
+    # parse specified package.json and generate GitHub links
     # TODO: Analyze transitive dependencies too.
     if args.javascript:
         js_package_dot_json_analysis(args.javascript)

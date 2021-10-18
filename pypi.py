@@ -10,28 +10,37 @@ import requests
 import requirements
 
 
-def python_requirements_dot_text_analysis(filepath):
+def python_requirements_dot_text_analysis(filepath, no_deps):
     """Execute overall analysis of Python's requirements.txt
 
     Combines python-related functionality to perform end-to-end
     analysis of requirements.txt. Prints output to terminal.
 
+    Selecting no_deps switch means no dependencies other than
+    those explicitly specified are analyzed.
+
     Args:
         filepath (str): filepath to a requirements.txt file
+        no_deps (bool): whether to analyze dependencies too
 
     Returns:
         None
     """
+    # pylint: disable=too-many-branches
     top_level_pkgs = parse_requirements_dot_text(filepath)
 
     # Retrieve all dependencies, both top-level and transitive, and keep a
     # unique list
     all_pkgs = []
-    for pkg in top_level_pkgs:
-        all_deps = get_pypi_package_dependencies(pkg)
-        for dep in all_deps:
-            if dep not in all_pkgs:
-                all_pkgs.append(dep)
+    # skip adding transitive dependencies if no_deps selected
+    if no_deps:
+        all_pkgs = top_level_pkgs
+    else:
+        for pkg in top_level_pkgs:
+            all_deps = get_pypi_package_dependencies(pkg)
+            for dep in all_deps:
+                if dep not in all_pkgs:
+                    all_pkgs.append(dep)
 
     # retrieve github urls for unique pypi packages and store date
     # on any packages without a PyPI entry or a gitHub
