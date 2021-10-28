@@ -1,5 +1,6 @@
 """npm-related functionality."""
 
+import csv
 import json
 import re
 
@@ -67,6 +68,33 @@ def js_package_dot_json_analysis(filepath):
 
     for url in github_urls:
         print(url)
+
+
+def js_txt_file_analysis(filepath):
+    """Retrieve source code links for npm packages listed in .txt file
+
+    Combines JavaScript-related functionality to return source code links
+    (such as GitHub) for npm packages listed line by line in a .txt file
+
+    Args:
+        filepath (str): filepath to a .txt file
+
+    Returns:
+        (list) packages
+    """
+    # extract npm packages line-by-line into list
+    pkgs = []
+    with open(filepath, "r") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            pkgs.append(row[0])
+
+    links = []
+    for pkg in pkgs:
+        link = get_github_link_from_npm_api(pkg)
+        links.append(link)
+
+    return links
 
 
 def get_npm_package_dependencies(pkg):
