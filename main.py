@@ -2,7 +2,7 @@
 
 import argparse
 
-from npm import js_package_dot_json_analysis
+from npm import js_package_dot_json_analysis, js_txt_file_analysis
 from pypi import python_requirements_dot_text_analysis
 
 
@@ -20,7 +20,7 @@ def parse_command_line_arguments():
     parser.add_argument(
         "--javascript",
         default=False,  # default value is False
-        help="Convert package.json file into GitHub links.",
+        help="Convert npm packages into GitHub links.",
     )
     parser.add_argument(
         "--no_deps",
@@ -41,4 +41,10 @@ if __name__ == "__main__":
     # parse specified package.json and generate GitHub links
     # TODO: Analyze transitive dependencies too.
     if args.javascript:
-        js_package_dot_json_analysis(args.javascript)
+        filepath = args.javascript
+        if filepath.lower().endswith(".json"):
+            js_package_dot_json_analysis(args.javascript)
+        elif filepath.lower().endswith(".txt"):
+            links = js_txt_file_analysis(args.javascript)
+            for link in links:
+                print(link)

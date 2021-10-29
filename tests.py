@@ -11,6 +11,7 @@ from pypi import (
 from npm import (
     clean_github_link,
     get_github_link_from_npm_api,
+    js_txt_file_analysis,
     parse_package_dot_json,
     get_npm_package_dependencies,
 )
@@ -73,6 +74,18 @@ class TestNpmMethods(unittest.TestCase):
                 "@fortawesome/free-solid-svg-icons",
                 "@fortawesome/react-fontawesome",
                 "d3",
+            ],
+        )
+
+    def test_js_txt_file_analysis(self):
+        """Check parsing .txt file of npm packages and returning src links"""
+        self.test_source_link_list = js_txt_file_analysis("test/test_npm_packages.txt")
+        self.assertEqual(len(self.test_source_link_list), 2)
+        self.assertEqual(
+            self.test_source_link_list,
+            [
+                "https://github.com/lodash/lodash.git",
+                "https://github.com/facebook/react.git",
             ],
         )
 
