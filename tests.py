@@ -2,6 +2,11 @@
 
 import unittest
 
+from julia import (
+    extract_repo_link_from_toml_dict,
+    find_package_dot_toml_path,
+    parse_julia_package_dot_toml,
+)
 from pypi import (
     get_github_url_from_pypi_json,
     get_pypi_data_json,
@@ -132,6 +137,43 @@ class TestNpmMethods(unittest.TestCase):
         self.assertEqual(
             clean_github_link("https://github.com/psf/requests/tree/main/requests"),
             "https://github.com/psf/requests",
+        )
+
+
+class TestJuliaMethods(unittest.TestCase):
+    """Test Julia-related methods."""
+
+    def test_parse_julia_package_dot_toml(self):
+        """Check parsing package.toml files"""
+        self.test_package_toml_dict = parse_julia_package_dot_toml(
+            "test/test_julia_package.toml"
+        )
+        self.assertEqual(
+            self.test_package_toml_dict,
+            {
+                "name": "AAindex",
+                "uuid": "1cd36ffe-cb05-4761-9ff9-f7bc1999e190",
+                "repo": "https://github.com/jowch/AAindex.jl.git",
+            },
+        )
+
+    def test_extract_repo_link_from_toml_dict(self):
+        """Check extracting repo link from toml dict"""
+        self.test_package_toml_dict = parse_julia_package_dot_toml(
+            "test/test_julia_package.toml"
+        )
+        self.test_repo_link = extract_repo_link_from_toml_dict(
+            self.test_package_toml_dict
+        )
+        self.assertEqual(self.test_repo_link, "https://github.com/jowch/AAindex.jl.git")
+
+    def test_find_package_dot_toml_path(self):
+        """Check finding correct package.toml"""
+        self.test_package_dot_toml_path = find_package_dot_toml_path(
+            pkg="ACME", base="test"
+        )
+        self.assertEqual(
+            self.test_package_dot_toml_path, "test/julia_package_tree/ACME/package.toml"
         )
 
 
