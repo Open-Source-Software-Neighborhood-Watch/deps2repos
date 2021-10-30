@@ -13,6 +13,7 @@ requests==2.26.0
 requirements-parser==0.2.0
 six==1.16.0
 setuptools==58.1
+tomli==1.2.2
 typing-extensions==3.10.0.2
 urllib3==1.26.7
 wheel==0.37.0
