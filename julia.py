@@ -1,6 +1,6 @@
 """Julia-related functionality"""
 
-import os
+import glob
 
 import tomli
 
@@ -32,19 +32,32 @@ def extract_repo_link_from_toml_dict(toml_dict):
     return toml_dict["repo"]
 
 
-def find_package_dot_toml_path(pkg, base="."):
+def find_all_package_dot_toml_paths(base="."):
+    """Find all package.toml paths.
+
+    Args:
+        base (str) - location from which to start tree search
+
+    Returns:
+        list - the relative paths to all package.toml files
+
+    """
+    paths = glob.glob(base + "/**/package.toml", recursive=True)
+    return paths
+
+
+def find_package_dot_toml_path(pkg, toml_path_list):
     """Find the path for a given julia package to its package.toml
 
     Args:
         pkg (str) - name of the julia package
-        base (str) - location from which to start tree search
+        toml_path_list (str) - paths of all package.toml files to search
 
     Returns:
         str - the relative path to the correct package.toml
     """
-    # find all directory paths
-    dirs = [x[0] for x in os.walk(base)]
-    # identify directory with the specified package name in it
-    correct_dir = next(x for x in dirs if pkg in x)
-    correct_path = correct_dir + "/package.toml"
-    return correct_path
+    pkg_path = next(x for x in toml_path_list if pkg in x)
+    return pkg_path
+
+
+# TODO: function for downloading most recent julia repository
