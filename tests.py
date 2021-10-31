@@ -172,12 +172,11 @@ class TestJuliaMethods(unittest.TestCase):
     def test_find_all_package_dot_toml_paths(self):
         """Check find_all_package_dot_toml_paths()."""
         self.test_toml_paths = find_all_package_dot_toml_paths("test")
-        self.assertEqual(
-            self.test_toml_paths,
-            [
-                "test/julia_package_tree/ADI/package.toml",
-                "test/julia_package_tree/ACME/package.toml",
-            ],
+        self.assertTrue(
+            "test/julia_package_tree/ADI/package.toml" in self.test_toml_paths
+        )
+        self.assertTrue(
+            "test/julia_package_tree/ACME/package.toml" in self.test_toml_paths
         )
 
     def test_find_package_dot_toml_path(self):
