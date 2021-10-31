@@ -2,6 +2,7 @@
 
 import argparse
 
+from julia import generate_julia_source_links
 from npm import js_package_dot_json_analysis, js_txt_file_analysis
 from pypi import python_requirements_dot_text_analysis
 
@@ -21,6 +22,11 @@ def parse_command_line_arguments():
         "--javascript",
         default=False,  # default value is False
         help="Convert npm packages into GitHub links.",
+    )
+    parser.add_argument(
+        "--julia",
+        default=False,  # default value is False
+        help="Convert julia packages into source links.",
     )
     parser.add_argument(
         "--no_deps",
@@ -48,3 +54,9 @@ if __name__ == "__main__":
             links = js_txt_file_analysis(args.javascript)
             for link in links:
                 print(link)
+
+    # parse directory containing julia package.tomls and return source links
+    if args.julia:
+        links = generate_julia_source_links(args.julia)
+        for link in links:
+            print(link)

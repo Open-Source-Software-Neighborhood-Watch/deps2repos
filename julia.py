@@ -5,6 +5,29 @@ import glob
 import tomli
 
 
+def generate_julia_source_links(filepath):
+    """Create list of of all julia-related links in directory.
+
+    Can be used to create a list of all julia package links
+    in the Julia registry.
+
+    Args:
+       filepath (str): filepath to a dir with 1 or more package.tomls
+
+    Returns:
+        list - all source links from all discovered package.toml files
+
+    """
+    links = []
+    paths = find_all_package_dot_toml_paths(filepath)
+    for path in paths:
+        toml_dict = parse_julia_package_dot_toml(path)
+        link = extract_repo_link_from_toml_dict(toml_dict)
+        links.append(link)
+
+    return links
+
+
 def parse_julia_package_dot_toml(filepath):
     """Convert julia package toml into dict.
 
@@ -58,6 +81,3 @@ def find_package_dot_toml_path(pkg, toml_path_list):
     """
     pkg_path = next(x for x in toml_path_list if pkg in x)
     return pkg_path
-
-
-# TODO: function for downloading most recent julia repository
