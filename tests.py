@@ -193,12 +193,11 @@ class TestJuliaMethods(unittest.TestCase):
     def test_generate_julia_source_links(self):
         """Check generate_julia_source_links()."""
         self.test_source_links = generate_julia_source_links("test")
-        self.assertEqual(
-            self.test_source_links,
-            [
-                "https://github.com/JuliaHCI/ADI.jl.git",
-                "https://github.com/HSU-ANT/ACME.jl.git",
-            ],
+        self.assertTrue(
+            "https://github.com/JuliaHCI/ADI.jl.git" in self.test_source_links
+        )
+        self.assertTrue(
+            "https://github.com/HSU-ANT/ACME.jl.git" in self.test_source_links
         )
 
 
