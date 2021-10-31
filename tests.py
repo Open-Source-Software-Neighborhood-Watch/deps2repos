@@ -4,6 +4,7 @@ import unittest
 
 from julia import (
     extract_repo_link_from_toml_dict,
+    find_all_package_dot_toml_paths,
     find_package_dot_toml_path,
     parse_julia_package_dot_toml,
 )
@@ -167,10 +168,22 @@ class TestJuliaMethods(unittest.TestCase):
         )
         self.assertEqual(self.test_repo_link, "https://github.com/jowch/AAindex.jl.git")
 
+    def test_find_all_package_dot_toml_paths(self):
+        """Check find_all_package_dot_toml_paths()."""
+        self.test_toml_paths = find_all_package_dot_toml_paths("test")
+        self.assertEqual(
+            self.test_toml_paths,
+            [
+                "test/julia_package_tree/ADI/package.toml",
+                "test/julia_package_tree/ACME/package.toml",
+            ],
+        )
+
     def test_find_package_dot_toml_path(self):
         """Check finding correct package.toml"""
+        self.test_toml_paths = find_all_package_dot_toml_paths("test")
         self.test_package_dot_toml_path = find_package_dot_toml_path(
-            pkg="ACME", base="test"
+            pkg="ACME", toml_path_list=self.test_toml_paths
         )
         self.assertEqual(
             self.test_package_dot_toml_path, "test/julia_package_tree/ACME/package.toml"
