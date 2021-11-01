@@ -4,7 +4,7 @@ Convert dependency file into list of Git repositories
 
 ## Explanation
 Have you ever wanted a list of all the GitHub links to the dependencies
-of a Python (PyPI) or JavaScript (npm) package? Then this is the repo
+of a Python (PyPI), JavaScript (npm), or Julia package? Then this is the repo
 for you!
 
 The Python/PyPI functionality is in beta stage. When a user selects Python,
@@ -16,6 +16,10 @@ selects Javascript, this program currently only returns the GitHub links
 of the top-level dependencies and the dependencies of those top-level dependencies.
 In other words, this tool does not **yet** traverse the entire npm dependency
 list.
+
+The Julia functionality is also in an early stage. When a user selects Julia, this
+program identifies all package.toml files recursively in a directory and then outputs
+each source code link associated with those packages.
 
 
 ## Installation
@@ -48,6 +52,11 @@ For a Javascript package.json file:
 
 ```
 python main.py --javascript [filename]
+```
+
+For analyzing the Julia registry or any folder containing Julia's package.toml's:
+```
+python main.py --julia [directory_name]
 ```
 
 Example command using deps2repos's own requirements.txt as input.
