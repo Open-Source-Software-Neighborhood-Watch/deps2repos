@@ -2,6 +2,13 @@
 
 import unittest
 
+from julia import (
+    extract_repo_link_from_toml_dict,
+    find_all_package_dot_toml_paths,
+    find_package_dot_toml_path,
+    generate_julia_source_links,
+    parse_julia_package_dot_toml,
+)
 from pypi import (
     get_github_url_from_pypi_json,
     get_pypi_data_json,
@@ -132,6 +139,64 @@ class TestNpmMethods(unittest.TestCase):
         self.assertEqual(
             clean_github_link("https://github.com/psf/requests/tree/main/requests"),
             "https://github.com/psf/requests",
+        )
+
+
+class TestJuliaMethods(unittest.TestCase):
+    """Test Julia-related methods."""
+
+    def test_parse_julia_package_dot_toml(self):
+        """Check parsing package.toml files"""
+        self.test_package_toml_dict = parse_julia_package_dot_toml(
+            "test/test_julia_package.toml"
+        )
+        self.assertEqual(
+            self.test_package_toml_dict,
+            {
+                "name": "AAindex",
+                "uuid": "1cd36ffe-cb05-4761-9ff9-f7bc1999e190",
+                "repo": "https://github.com/jowch/AAindex.jl.git",
+            },
+        )
+
+    def test_extract_repo_link_from_toml_dict(self):
+        """Check extracting repo link from toml dict"""
+        self.test_package_toml_dict = parse_julia_package_dot_toml(
+            "test/test_julia_package.toml"
+        )
+        self.test_repo_link = extract_repo_link_from_toml_dict(
+            self.test_package_toml_dict
+        )
+        self.assertEqual(self.test_repo_link, "https://github.com/jowch/AAindex.jl.git")
+
+    def test_find_all_package_dot_toml_paths(self):
+        """Check find_all_package_dot_toml_paths()."""
+        self.test_toml_paths = find_all_package_dot_toml_paths("test")
+        self.assertTrue(
+            "test/julia_package_tree/ADI/package.toml" in self.test_toml_paths
+        )
+        self.assertTrue(
+            "test/julia_package_tree/ACME/package.toml" in self.test_toml_paths
+        )
+
+    def test_find_package_dot_toml_path(self):
+        """Check finding correct package.toml"""
+        self.test_toml_paths = find_all_package_dot_toml_paths("test")
+        self.test_package_dot_toml_path = find_package_dot_toml_path(
+            pkg="ACME", toml_path_list=self.test_toml_paths
+        )
+        self.assertEqual(
+            self.test_package_dot_toml_path, "test/julia_package_tree/ACME/package.toml"
+        )
+
+    def test_generate_julia_source_links(self):
+        """Check generate_julia_source_links()."""
+        self.test_source_links = generate_julia_source_links("test")
+        self.assertTrue(
+            "https://github.com/JuliaHCI/ADI.jl.git" in self.test_source_links
+        )
+        self.assertTrue(
+            "https://github.com/HSU-ANT/ACME.jl.git" in self.test_source_links
         )
 
 
