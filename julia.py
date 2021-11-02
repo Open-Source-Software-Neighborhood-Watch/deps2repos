@@ -18,7 +18,6 @@ def generate_julia_source_links(filepath):
 
     Returns:
         list - all source links from all discovered package.toml files
-
     """
     links = []
     paths = find_all_paths(path_endings=["package.toml"], base=filepath)
