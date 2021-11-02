@@ -2,7 +2,7 @@
 
 import unittest
 
-from bioconda import parse_meta_dot_yaml_for_source_link
+from bioconda import generate_bioconda_source_links, parse_meta_dot_yaml_for_source_link
 from julia import (
     extract_repo_link_from_toml_dict,
     find_package_dot_toml_path,
@@ -184,6 +184,17 @@ class TestBiocondaMethods(unittest.TestCase):
         """Check parsing package.toml files"""
         self.test_bioconda_yaml = parse_meta_dot_yaml_for_source_link("test/meta.yaml")
         self.assertEqual(self.test_bioconda_yaml, "https://github.com/prihoda/AbNumber")
+
+    def test_generate_bioconda_source_links(self):
+        """Check generate_bioconda_source_links() function."""
+        self.test_bioconda_source_links = generate_bioconda_source_links(".")
+        self.assertTrue(
+            "https://github.com/prihoda/AbNumber" in self.test_bioconda_source_links
+        )
+        self.assertTrue(
+            "https://github.com/marekborowiec/AMAS" in self.test_bioconda_source_links
+        )
+        self.assertEqual(len(self.test_bioconda_source_links), 2)
 
 
 class TestUtilsMethods(unittest.TestCase):
