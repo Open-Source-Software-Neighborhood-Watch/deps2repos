@@ -40,6 +40,7 @@ def parse_meta_dot_yaml_for_source_link(filepath):
         str - the source code link (e.g. GitHub) for the package
 
     """
+    link = ""
     with open(filepath, "r") as meta_file:
         for line in meta_file.readlines():
             if "home" in line:
