@@ -4,6 +4,8 @@ import glob
 
 import tomli
 
+from utils import find_all_paths
+
 
 def generate_julia_source_links(filepath):
     """Create list of of all julia-related links in directory.
@@ -19,7 +21,7 @@ def generate_julia_source_links(filepath):
 
     """
     links = []
-    paths = find_all_package_dot_toml_paths(filepath)
+    paths = find_all_paths(path_endings=["package.toml"], base=filepath)
     for path in paths:
         toml_dict = parse_julia_package_dot_toml(path)
         link = extract_repo_link_from_toml_dict(toml_dict)
@@ -53,20 +55,6 @@ def extract_repo_link_from_toml_dict(toml_dict):
         str - the repo link
     """
     return toml_dict["repo"]
-
-
-def find_all_package_dot_toml_paths(base="."):
-    """Find all package.toml paths.
-
-    Args:
-        base (str) - location from which to start tree search
-
-    Returns:
-        list - the relative paths to all package.toml files
-
-    """
-    paths = glob.glob(base + "/**/package.toml", recursive=True)
-    return paths
 
 
 def find_package_dot_toml_path(pkg, toml_path_list):

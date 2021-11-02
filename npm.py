@@ -6,6 +6,8 @@ import re
 
 import requests
 
+from utils import clean_github_link
+
 
 def js_package_dot_json_analysis(filepath):
     """Execute overall analysis of javascript's package.json
@@ -153,29 +155,6 @@ def parse_package_dot_json(filepath):
         dep_list.append(dep)
 
     return dep_list
-
-
-def clean_github_link(raw_url):
-    """Convert raw URL into GitHub link with org and repo.
-
-    Convert a raw URL into cleaned URL, where a cleaned url
-    has https://www.github.com/{org}/{package}
-
-    Args:
-        raw_url (str) - raw URL from npm
-
-    Returns
-        cleaned_url: string
-    """
-    # make https:// optional
-    # make www. optional
-    # check for a organization name after github.com and a package name
-    pattern = re.compile("(https://)?(www.)?github.com/[^/]*/[^/]*")
-    try:
-        cleaned_url = pattern.search(raw_url).group(0)
-    except AttributeError:
-        cleaned_url = ""
-    return cleaned_url
 
 
 def get_github_link_from_npm_api(pkg):
