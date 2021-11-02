@@ -1,6 +1,7 @@
 # deps2repos
-Convert dependency file into list of Git repositories
+<img width="300" alt="deps2repos" src="https://user-images.githubusercontent.com/45634754/139943563-60f82e0c-890d-4650-bef1-b1957b5e7d11.png">
 
+Convert dependency file into list of Git repositories
 
 ## Explanation
 Have you ever wanted a list of all the GitHub links to the dependencies
