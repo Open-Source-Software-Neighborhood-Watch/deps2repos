@@ -2,6 +2,7 @@
 
 import unittest
 
+from bioconda import parse_meta_dot_yaml_for_source_link
 from julia import (
     extract_repo_link_from_toml_dict,
     find_all_package_dot_toml_paths,
@@ -16,12 +17,12 @@ from pypi import (
     parse_requirements_dot_text,
 )
 from npm import (
-    clean_github_link,
     get_github_link_from_npm_api,
     js_txt_file_analysis,
     parse_package_dot_json,
     get_npm_package_dependencies,
 )
+from utils import clean_github_link, find_all_paths
 
 # pylint: disable="attribute-defined-outside-init"
 
@@ -128,19 +129,6 @@ class TestNpmMethods(unittest.TestCase):
             [],
         )
 
-    def test_clean_github_link(self):
-        """Test clean_github_link function."""
-        self.assertEqual(
-            clean_github_link(
-                "git+https://www.github.com/psf/requests/tree/main/requests"
-            ),
-            "https://www.github.com/psf/requests",
-        )
-        self.assertEqual(
-            clean_github_link("https://github.com/psf/requests/tree/main/requests"),
-            "https://github.com/psf/requests",
-        )
-
 
 class TestJuliaMethods(unittest.TestCase):
     """Test Julia-related methods."""
@@ -169,16 +157,6 @@ class TestJuliaMethods(unittest.TestCase):
         )
         self.assertEqual(self.test_repo_link, "https://github.com/jowch/AAindex.jl.git")
 
-    def test_find_all_package_dot_toml_paths(self):
-        """Check find_all_package_dot_toml_paths()."""
-        self.test_toml_paths = find_all_package_dot_toml_paths("test")
-        self.assertTrue(
-            "test/julia_package_tree/ADI/package.toml" in self.test_toml_paths
-        )
-        self.assertTrue(
-            "test/julia_package_tree/ACME/package.toml" in self.test_toml_paths
-        )
-
     def test_find_package_dot_toml_path(self):
         """Check finding correct package.toml"""
         self.test_toml_paths = find_all_package_dot_toml_paths("test")
@@ -197,6 +175,51 @@ class TestJuliaMethods(unittest.TestCase):
         )
         self.assertTrue(
             "https://github.com/HSU-ANT/ACME.jl.git" in self.test_source_links
+        )
+
+
+class TestBiocondaMethods(unittest.TestCase):
+    """Test Bioconda-related methods."""
+
+    def test_parse_bioconda_meta_dot_yaml(self):
+        """Check parsing package.toml files"""
+        self.test_bioconda_yaml = parse_meta_dot_yaml_for_source_link("test/meta.yaml")
+        self.assertEqual(self.test_bioconda_yaml, "https://github.com/prihoda/AbNumber")
+
+
+class TestUtilsMethods(unittest.TestCase):
+    """Test functions that work across ecosystems."""
+
+    def test_find_all_package_toml_paths(self):
+        """Check find_all_paths() on toml paths."""
+        self.test_toml_paths = find_all_paths(
+            path_endings=["package.toml"], base="test"
+        )
+        self.assertTrue(
+            "test/julia_package_tree/ADI/package.toml" in self.test_toml_paths
+        )
+        self.assertTrue(
+            "test/julia_package_tree/ACME/package.toml" in self.test_toml_paths
+        )
+
+    def test_find_all_meta_dot_yaml_paths(self):
+        """Check find_all_paths() on bioconda meta.y[a]ml paths."""
+        self.test_yaml_paths = find_all_paths(
+            path_endings=["meta.yaml", "meta.yml"], base="."
+        )
+        self.assertTrue("./test/meta.yaml" in self.test_yaml_paths)
+
+    def test_clean_github_link(self):
+        """Test clean_github_link function."""
+        self.assertEqual(
+            clean_github_link(
+                "git+https://www.github.com/psf/requests/tree/main/requests"
+            ),
+            "https://www.github.com/psf/requests",
+        )
+        self.assertEqual(
+            clean_github_link("https://github.com/psf/requests/tree/main/requests"),
+            "https://github.com/psf/requests",
         )
 
 

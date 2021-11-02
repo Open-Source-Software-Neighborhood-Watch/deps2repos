@@ -3,11 +3,12 @@
 import ast
 import subprocess
 import urllib
-from urllib.parse import urlparse
 
 
 import requests
 import requirements
+
+from utils import clean_github_link
 
 
 def python_requirements_dot_text_analysis(filepath, no_deps):
@@ -187,14 +188,6 @@ def get_github_url_from_pypi_json(pypi_pkg_json):
             break
 
     if github_page:
-        page = urlparse(github_page)
-        github_page = (
-            # Only extract first couple parts of github page path to avoid
-            # issues page, for instance
-            "https://"
-            + page.netloc
-            + "/"
-            + "/".join(page.path.split("/")[1:3])
-        )
+        github_page = clean_github_link(github_page)
 
     return github_page
