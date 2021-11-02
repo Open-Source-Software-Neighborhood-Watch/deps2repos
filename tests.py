@@ -5,7 +5,6 @@ import unittest
 from bioconda import parse_meta_dot_yaml_for_source_link
 from julia import (
     extract_repo_link_from_toml_dict,
-    find_all_package_dot_toml_paths,
     find_package_dot_toml_path,
     generate_julia_source_links,
     parse_julia_package_dot_toml,
@@ -159,7 +158,7 @@ class TestJuliaMethods(unittest.TestCase):
 
     def test_find_package_dot_toml_path(self):
         """Check finding correct package.toml"""
-        self.test_toml_paths = find_all_package_dot_toml_paths("test")
+        self.test_toml_paths = find_all_paths(["package.toml"], "test")
         self.test_package_dot_toml_path = find_package_dot_toml_path(
             pkg="ACME", toml_path_list=self.test_toml_paths
         )
