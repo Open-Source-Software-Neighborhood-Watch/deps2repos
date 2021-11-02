@@ -3,7 +3,6 @@
 import ast
 import subprocess
 import urllib
-from urllib.parse import urlparse
 
 
 import requests
