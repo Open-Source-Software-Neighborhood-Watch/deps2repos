@@ -46,7 +46,7 @@ def find_all_paths(path_endings, base="."):
 
 
 def nested_dictionary_extract(key, dictionary):
-    """Find all values of specifc key in nested dictionary/list
+    """Find all values of specific key in nested dictionary/list
 
     Args:
         key (str) - key for which to search
