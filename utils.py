@@ -43,3 +43,26 @@ def find_all_paths(path_endings, base="."):
         found_paths = glob.glob(base + "/**/" + path_ending, recursive=True)
         paths.extend(found_paths)
     return paths
+
+
+def nested_dictionary_extract(key, dictionary):
+    """Find all values of specifc key in nested dictionary/list
+
+    Args:
+        key (str) - key for which to search
+        dictionary (dict) - dictionary through which to search. Can be nested with lists included
+
+    Returns:
+        generator - contains all values of search key
+    """
+
+    if isinstance(dictionary, list):
+        for i in dictionary:
+            for x in nested_dictionary_extract(key, i):
+                yield x
+    elif isinstance(dictionary, dict):
+        if key in dictionary:
+            yield dictionary[key]
+        for j in dictionary.values():
+            for x in nested_dictionary_extract(key, j):
+                yield x
