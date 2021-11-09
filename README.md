@@ -74,6 +74,12 @@ For a Python requirements.txt file:
 python main.py --python [filename]
 ```
 
+For a Bioconda recipe file:
+
+```
+python main.py --bioconda [dirname]
+```
+
 For a Javascript package.json file:
 
 ```
