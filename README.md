@@ -11,7 +11,7 @@ The Python/PyPI functionality is in beta stage. When a user selects Python,
 this program returns the GitHub links for all top-level and transitive
 dependencies.
 
-The JavaScript/npm functionlity is in less-than-beta-stage. When a user
+The JavaScript/npm functionality is in less-than-beta-stage. When a user
 selects Javascript, this program currently only returns the GitHub links
 of the top-level dependencies and the dependencies of those top-level dependencies.
 In other words, this tool does not **yet** traverse the entire npm dependency
@@ -24,39 +24,15 @@ each source code link associated with those packages.
 
 ## Installation
 
+To install Bioconda functionality, please follow instructions in [BIOCONDA-README.md](BIOCONDA-README.md)
+
 To download:
 ```
 git clone https://github.com/IQTLabs/deps2repos
 ```
 
-Download Bioconda-utils and Bioconda-recipes (Only if attempting to parse Bioconda Recipes)
-
-```
-git clone https://github.com/bioconda/bioconda-utils
-```
-```
-git clone https://github.com/bioconda/bioconda-recipes
-```
-
-Create Conda Environment
-```
-conda create --name deps2repos
-```
-Activate Conda
-```
-conda activate deps2repos
-```
-Install bioconda-utils
-```
-cd bioconda-utils
-conda install --file bioconda_utils/bioconda_utils-requirements.txt -c conda-forge -c bioconda 
-python setup.py install
-cd ..
-```
-
 To download dependencies:
 ```
-cd deps2repos
 pip install -r requirements.txt
 ```
 
@@ -74,7 +50,7 @@ For a Python requirements.txt file:
 python main.py --python [filename]
 ```
 
-For a Bioconda recipe file:
+For a Bioconda recipe[s] directory:
 
 ```
 python main.py --bioconda [dirname]
