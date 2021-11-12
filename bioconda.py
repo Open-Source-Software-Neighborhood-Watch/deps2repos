@@ -1,9 +1,13 @@
 """Bioconda-related functionality"""
 
 import os
+import logging
 
 from bioconda_utils.recipe import Recipe
 from utils import find_all_paths, clean_github_link, nested_dictionary_extract
+
+
+logger = logging.getLogger(__name__)
 
 
 def generate_bioconda_source_links(dirpath):
@@ -20,6 +24,7 @@ def generate_bioconda_source_links(dirpath):
     """
     # Using set() to ensure no duplicates
     all_links = set()
+    logger.info(f"Generating Bioconda source links from {dirpath}")
     paths = find_all_paths(path_endings=["meta.yaml", "meta.yml"], base=dirpath)
     for path in paths:
         links = parse_meta_dot_yaml_for_source_link(path)
@@ -55,5 +60,6 @@ def parse_meta_dot_yaml_for_source_link(filepath):
         link = clean_github_link(raw_link)
         if link:
             links.append(link)
-
+    if len(links) > 0:
+        logger.info(f"Found {len(links)} links for {path}")
     return links
