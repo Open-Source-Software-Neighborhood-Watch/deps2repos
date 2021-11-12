@@ -1,6 +1,7 @@
 """Utility functions across ecosystems."""
 
 import glob
+import os
 import re
 
 
@@ -40,7 +41,9 @@ def find_all_paths(path_endings, base="."):
     """
     paths = []
     for path_ending in path_endings:
-        found_paths = glob.glob(base + "/**/" + path_ending, recursive=True)
+        found_paths = glob.glob(
+            os.path.expanduser(base) + "/**/" + path_ending, recursive=True,
+        )
         paths.extend(found_paths)
     return paths
 
@@ -50,12 +53,12 @@ def nested_dictionary_extract(key, dictionary):
 
     Args:
         key (str) - key for which to search
-        dictionary (dict) - dictionary through which to search. Can be nested with lists included
+        dictionary (dict) - dictionary through which to search. Can be
+            nested with lists included
 
     Returns:
         generator - contains all values of search key
     """
-
     if isinstance(dictionary, list):
         for i in dictionary:
             for x in nested_dictionary_extract(key, i):
