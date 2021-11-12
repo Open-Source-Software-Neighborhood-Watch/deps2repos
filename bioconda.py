@@ -27,17 +27,17 @@ def generate_bioconda_source_links(dirpath):
     logger.info(f"Generating Bioconda source links from {dirpath}")
     paths = find_all_paths(path_endings=["meta.yaml", "meta.yml"], base=dirpath)
     for path in paths:
-        links = parse_meta_dot_yaml_for_source_link(path)
+        links = parse_meta_dot_yaml_for_source_links(path)
         for link in links:
             all_links.add(link)
 
     return list(all_links)
 
 
-def parse_meta_dot_yaml_for_source_link(filepath):
-    """Find source code link in meta.yaml file.
+def parse_meta_dot_yaml_for_source_links(filepath):
+    """Find source code GitHub links in meta.yaml file.
 
-    Parsing meta.yaml conda files is not easy if done thoroughly
+    Parsing meta.yaml Bioconda files is not easy if done thoroughly
     because meta.yaml files are not YAML compliant given their
     use of jinja2 templating. The approach below uses bioconda_utils
     to create the Recipe object from the meta.yaml file.
@@ -46,12 +46,14 @@ def parse_meta_dot_yaml_for_source_link(filepath):
        filepath (str) - path to the meta.yaml file to be parsed
 
     Returns:
-        list - the source code link[s] (e.g. GitHub) for the package
+        list - the source code GitHub link[s] for the package
 
     """
     links = []
+
     # Strip fname and keep path
     path = os.path.dirname(filepath)
+
     # This unusual call is a quirk of bioconda_utils.recipe
     recipe = Recipe.from_file(path, path)
     # Get link[s]
