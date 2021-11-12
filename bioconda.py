@@ -55,9 +55,22 @@ def parse_meta_dot_yaml_for_source_links(filepath):
     path = os.path.dirname(filepath)
 
     # This unusual call is a quirk of bioconda_utils.recipe
-    recipe = Recipe.from_file(path, path)
-    # Get link[s]
-    raw_links = list(nested_dictionary_extract("url", recipe.meta))
+    try:
+        recipe = Recipe.from_file(path, path)
+    except Exception as e:
+        logger.warning(f"Could not create recipe from {path}")
+        return links
+
+    # Extract link[s]
+    if "source" in recipe.meta:
+        raw_links = list(nested_dictionary_extract("url", recipe.meta["source"]))
+        if raw_links and isinstance(raw_links[0], list):
+            raw_links = raw_links[0]
+    else:
+        logger.warning(f"Recipe from {path} missing source")
+        return links
+
+    # Select GitHub link[s]
     for raw_link in raw_links:
         link = clean_github_link(raw_link)
         if link:
