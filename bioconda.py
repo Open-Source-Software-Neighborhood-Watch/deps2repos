@@ -63,12 +63,22 @@ def parse_meta_dot_yaml_for_source_links(filepath):
 
     # Extract link[s]
     if "source" in recipe.meta:
-        raw_links = list(nested_dictionary_extract("url", recipe.meta["source"]))
-        if raw_links and isinstance(raw_links[0], list):
-            raw_links = raw_links[0]
+        link_items = list(nested_dictionary_extract("url", recipe.meta["source"]))
+        if any([isinstance(item, list) for item in link_items]):
+            # At least one link item is a list
+            raw_links = []
+            for item in link_items:
+                if isinstance(item, list):
+                    raw_links.extend(item)
+                else:
+                    raw_links.append(item)
+        else:
+            # No link item is a list
+            raw_links = link_items
     else:
         logger.warning(f"Recipe from {path} missing source")
         return links
+
 
     # Select GitHub link[s]
     for raw_link in raw_links:
