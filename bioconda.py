@@ -4,7 +4,12 @@ import os
 import logging
 
 from bioconda_utils.recipe import Recipe
-from utils import find_all_paths, clean_github_link, nested_dictionary_extract
+from utils import (
+    find_all_paths,
+    clean_github_link,
+    nested_dictionary_extract,
+    flatten_list_with_lists,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -17,7 +22,8 @@ def generate_bioconda_source_links(dirpath):
     in the bioconda registry.
 
     Args:
-       dirpath (str): dirpath to a bioconda recipe directory with 1 or more meta.yaml files
+       dirpath (str): dirpath to a bioconda recipe directory with 1 or
+           more meta.yaml files
 
     Returns:
         list - all source links from all discovered meta.yaml files
@@ -58,27 +64,17 @@ def parse_meta_dot_yaml_for_source_links(filepath):
     try:
         recipe = Recipe.from_file(path, path)
     except Exception as e:
-        logger.warning(f"Could not create recipe from {path}")
+        logger.warning(f"Could not create recipe from {path}: {e}")
         return links
 
     # Extract link[s]
     if "source" in recipe.meta:
-        link_items = list(nested_dictionary_extract("url", recipe.meta["source"]))
-        if any([isinstance(item, list) for item in link_items]):
-            # At least one link item is a list
-            raw_links = []
-            for item in link_items:
-                if isinstance(item, list):
-                    raw_links.extend(item)
-                else:
-                    raw_links.append(item)
-        else:
-            # No link item is a list
-            raw_links = link_items
+        raw_links = flatten_list_with_lists(
+            list(nested_dictionary_extract("url", recipe.meta["source"]))
+        )
     else:
         logger.warning(f"Recipe from {path} missing source")
         return links
-
 
     # Select GitHub link[s]
     for raw_link in raw_links:
