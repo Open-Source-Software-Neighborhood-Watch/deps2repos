@@ -69,3 +69,21 @@ def nested_dictionary_extract(key, dictionary):
         for j in dictionary.values():
             for x in nested_dictionary_extract(key, j):
                 yield x
+
+
+def flatten_list_with_lists(uneven_list):
+    """Flatten a list containing lists.
+
+    Args:
+        uneven_list (list) - list containing lists
+
+    Returns:
+        list - a list without lists
+    """
+    flattened_list = []
+    for item in uneven_list:
+        if isinstance(item, list):
+            flattened_list.extend(item)
+        else:
+            flattened_list.append(item)
+    return flattened_list
