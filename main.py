@@ -1,11 +1,21 @@
 """Implement CLI for deps2repos"""
 
 import argparse
+import logging
 
 from bioconda import generate_bioconda_source_links
 from julia import generate_julia_source_links
 from npm import js_package_dot_json_analysis, js_txt_file_analysis
 from pypi import python_requirements_dot_text_analysis
+
+
+root = logging.getLogger()
+root.setLevel(logging.INFO)
+
+ch = logging.StreamHandler()
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+ch.setFormatter(formatter)
+root.addHandler(ch)
 
 
 def parse_command_line_arguments():

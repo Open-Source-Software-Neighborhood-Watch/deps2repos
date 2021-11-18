@@ -1,6 +1,7 @@
 """Utility functions across ecosystems."""
 
 import glob
+import os
 import re
 
 
@@ -40,6 +41,49 @@ def find_all_paths(path_endings, base="."):
     """
     paths = []
     for path_ending in path_endings:
-        found_paths = glob.glob(base + "/**/" + path_ending, recursive=True)
+        found_paths = glob.glob(
+            os.path.expanduser(base) + "/**/" + path_ending, recursive=True,
+        )
         paths.extend(found_paths)
     return paths
+
+
+def nested_dictionary_extract(key, dictionary):
+    """Find all values of specific key in nested dictionary/list
+
+    Args:
+        key (str) - key for which to search
+        dictionary (dict) - dictionary through which to search. Can be
+            nested with lists included
+
+    Returns:
+        generator - contains all values of search key
+    """
+    if isinstance(dictionary, list):
+        for i in dictionary:
+            for x in nested_dictionary_extract(key, i):
+                yield x
+    elif isinstance(dictionary, dict):
+        if key in dictionary:
+            yield dictionary[key]
+        for j in dictionary.values():
+            for x in nested_dictionary_extract(key, j):
+                yield x
+
+
+def flatten_list_with_lists(uneven_list):
+    """Flatten a list containing lists.
+
+    Args:
+        uneven_list (list) - list containing lists
+
+    Returns:
+        list - a list without lists
+    """
+    flattened_list = []
+    for item in uneven_list:
+        if isinstance(item, list):
+            flattened_list.extend(item)
+        else:
+            flattened_list.append(item)
+    return flattened_list
