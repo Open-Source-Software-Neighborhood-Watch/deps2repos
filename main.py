@@ -3,7 +3,6 @@
 import argparse
 import logging
 
-from bioconda import generate_bioconda_source_links
 from julia import generate_julia_source_links
 from npm import js_package_dot_json_analysis, js_txt_file_analysis
 from pypi import python_requirements_dot_text_analysis
@@ -79,6 +78,10 @@ if __name__ == "__main__":
 
     # parse bionconda directory containing meta.yamls and return source links
     if args.bioconda:
+        # only require import of bioconda functionality if required
+        # this avoids requiring the user to follow complicated installation instructions
+        # unless the user wants the bioconda functionality
+        from bioconda import generate_bioconda_source_links
         links = generate_bioconda_source_links(args.bioconda)
         for link in links:
             print(link)
