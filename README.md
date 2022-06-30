@@ -24,7 +24,7 @@ each source code link associated with those packages.
 
 ## Installation
 
-To install Bioconda functionality, please follow instructions in [BIOCONDA-README.md](BIOCONDA-README.md)
+To install Bioconda functionality if you need to do Bioconda-related tasks, please follow instructions in [BIOCONDA-README.md](BIOCONDA-README.md)
 
 To download:
 ```
