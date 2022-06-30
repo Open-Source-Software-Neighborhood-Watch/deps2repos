@@ -28,7 +28,8 @@ To install Bioconda functionality if you need to do Bioconda-related tasks, plea
 
 To download:
 ```
-git clone https://github.com/IQTLabs/deps2repos
+git clone https://github.com/Open-Source-Software-Neighborhood-Watch
+/deps2repos
 ```
 
 To download dependencies:
