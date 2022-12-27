@@ -17,5 +17,5 @@ setuptools==58.1
 tomli==1.2.2
 typing-extensions==3.10.0.2
 urllib3==1.26.7
-wheel==0.37.0
+wheel==0.38.1
 zipp==3.5.1
