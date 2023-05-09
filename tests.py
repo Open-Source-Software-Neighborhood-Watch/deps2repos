@@ -2,7 +2,6 @@
 
 import unittest
 
-from bioconda import generate_bioconda_source_links, parse_meta_dot_yaml_for_source_links
 from julia import (
     extract_repo_link_from_toml_dict,
     find_package_dot_toml_path,
@@ -176,34 +175,6 @@ class TestJuliaMethods(unittest.TestCase):
             "https://github.com/HSU-ANT/ACME.jl.git" in self.test_source_links
         )
 
-
-class TestBiocondaMethods(unittest.TestCase):
-    """Test Bioconda-related methods."""
-
-    def test_parse_bioconda_meta_dot_yaml(self):
-        """Check parsing package.toml files"""
-        self.test_bioconda_yaml = parse_meta_dot_yaml_for_source_links("test/meta.yaml")
-        self.assertEqual(
-            self.test_bioconda_yaml, ["https://github.com/prihoda/abnumber"]
-        )
-
-    def test_generate_bioconda_source_links(self):
-        """Check generate_bioconda_source_links() function."""
-        self.test_bioconda_source_links = generate_bioconda_source_links(
-            "test/bioconda_package_tree"
-        )
-        self.assertTrue(
-            "https://github.com/prihoda/abnumber" in self.test_bioconda_source_links
-        )
-        self.assertTrue(
-            "https://github.com/ablab/spades" in self.test_bioconda_source_links
-        )
-        self.assertTrue(
-            "https://github.com/tseemann/shovill" in self.test_bioconda_source_links
-        )
-        self.assertEqual(len(self.test_bioconda_source_links), 7)
-
-
 class TestUtilsMethods(unittest.TestCase):
     """Test functions that work across ecosystems."""
 
@@ -218,13 +189,6 @@ class TestUtilsMethods(unittest.TestCase):
         self.assertTrue(
             "test/julia_package_tree/ACME/package.toml" in self.test_toml_paths
         )
-
-    def test_find_all_meta_dot_yaml_paths(self):
-        """Check find_all_paths() on bioconda meta.y[a]ml paths."""
-        self.test_yaml_paths = find_all_paths(
-            path_endings=["meta.yaml", "meta.yml"], base="."
-        )
-        self.assertTrue("./test/meta.yaml" in self.test_yaml_paths)
 
     def test_clean_github_link(self):
         """Test clean_github_link function."""
