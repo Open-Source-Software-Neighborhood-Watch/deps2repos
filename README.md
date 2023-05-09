@@ -24,8 +24,6 @@ each source code link associated with those packages.
 
 ## Installation
 
-To install Bioconda functionality if you need to do Bioconda-related tasks, please follow instructions in [BIOCONDA-README.md](BIOCONDA-README.md)
-
 To download:
 ```
 git clone https://github.com/Open-Source-Software-Neighborhood-Watch/deps2repos
@@ -33,10 +31,15 @@ git clone https://github.com/Open-Source-Software-Neighborhood-Watch/deps2repos
 
 To download dependencies:
 ```
-pip install -r requirements.txt
+pipenv install
 ```
 
 ## Usage
+
+Create virtual environment:
+```
+pipenv shell
+``
 
 For help:
 
@@ -48,12 +51,6 @@ For a Python requirements.txt file:
 
 ```
 python main.py --python [filename]
-```
-
-For a Bioconda recipe[s] directory:
-
-```
-python main.py --bioconda [dirname]
 ```
 
 For a Javascript package.json file:
