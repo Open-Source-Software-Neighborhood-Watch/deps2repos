@@ -31,10 +31,15 @@ git clone https://github.com/Open-Source-Software-Neighborhood-Watch/deps2repos
 
 To download dependencies:
 ```
-pip install -r requirements.txt
+pipenv install
 ```
 
 ## Usage
+
+Create virtual environment:
+```
+pipenv shell
+``
 
 For help:
 
