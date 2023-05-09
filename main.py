@@ -39,11 +39,6 @@ def parse_command_line_arguments():
         help="Convert julia packages into source links.",
     )
     parser.add_argument(
-        "--bioconda",
-        default=False,  # default value is False
-        help="Convert bioconda packages into source links.",
-    )
-    parser.add_argument(
         "--no_deps",
         dest="no_deps",
         action="store_true",
@@ -73,15 +68,5 @@ if __name__ == "__main__":
     # parse directory containing julia package.tomls and return source links
     if args.julia:
         links = generate_julia_source_links(args.julia)
-        for link in links:
-            print(link)
-
-    # parse bionconda directory containing meta.yamls and return source links
-    if args.bioconda:
-        # only require import of bioconda functionality if required
-        # this avoids requiring the user to follow complicated installation instructions
-        # unless the user wants the bioconda functionality
-        from bioconda import generate_bioconda_source_links
-        links = generate_bioconda_source_links(args.bioconda)
         for link in links:
             print(link)
