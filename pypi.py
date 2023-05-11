@@ -165,7 +165,7 @@ def get_github_url_from_pypi_json(pypi_pkg_json):
     potential_github_fields = []
 
     # check home page url
-    if "github.com" in pypi_pkg_json["info"]["home_page"]:
+    if pypi_pkg_json["info"]["home_page"] is not None and "github.com" in pypi_pkg_json["info"]["home_page"]:
         potential_github_fields.append(pypi_pkg_json["info"]["home_page"])
 
     # check project url fields if url fields present
