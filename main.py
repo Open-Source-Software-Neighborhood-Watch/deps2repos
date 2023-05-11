@@ -21,7 +21,7 @@ def parse_command_line_arguments():
     """Parse command line arguments with argparse."""
     parser = argparse.ArgumentParser(
         description="Convert dependency files into list of GitHub links.",
-        epilog="For help with this program, contact John Speed at jmeyers@iqt.org.",
+        epilog="Want help? Leave an issue at github.com/Open-Source-Software-Neighborhood-Watch/deps2repos",
     )
     parser.add_argument(
         "--python",
