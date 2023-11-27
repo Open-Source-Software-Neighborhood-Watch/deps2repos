@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 importlib-metadata = "==6.8.0"
 packaging = "==23.2"
-pipgrip = "==0.10.9"
+pipgrip = "==0.10.10"
 requests = "==2.31.0"
 requirements-parser = "==0.5.0"
 "ruamel.yaml" = "0.17.24"
