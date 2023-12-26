@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-importlib-metadata = "==7.0.0"
+importlib-metadata = "==7.0.1"
 packaging = "==23.2"
 pipgrip = "==0.10.11"
 requests = "==2.31.0"
