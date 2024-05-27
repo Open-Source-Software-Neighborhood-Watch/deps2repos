@@ -11,7 +11,7 @@ requests = "==2.32.0"
 requirements-parser = "==0.9.0"
 "ruamel.yaml" = "0.17.24"
 tomli = "2.0.1"
-typing-extensions = "==4.11.0"
+typing-extensions = "==4.12.0"
 
 
 [dev-packages]
